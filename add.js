@@ -6,7 +6,9 @@ javascript:
 
 (function(d){function l(){(function($){
 
-if ( $('#ID-m-content-content > h2').text() === 'オーガニック検索ソース' ) {
+// iframe要素を取得
+var iframe = $('#galaxyIframe').contents();
+if (iframe.find('#ID-m-content-content h2').text() === 'オーガニック検索ソース') {
 
   if ( ! $('body').hasClass('ga_search_data_current') ) { // 連動[1] - 二度押し防止
 
@@ -16,8 +18,8 @@ if ( $('#ID-m-content-content > h2').text() === 'オーガニック検索ソー�
       .append('<div style="background-color: rgba(0, 0, 0, .5); height: 100%; position: fixed; left: 0; top: 0; width: 99%; z-index: 999999999;"><div style="background-color: #fff; border-radius: 9px; border: 3px solid #333; padding: 20px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"><h1 style="margin: 0; text-align: center">オーガニック検索ソース[登録]</h1><div id="ga_search_data_state" style="margin-top: 1em; text-align: center;">このまましばらくお待ちください。</div><div style="background-color: #fff; border: 1px solid #ccc; margin: 1em auto 0; overflow: hidden; position: relative; width: 300px;"><div id="ga_search_data_bar" style="background-color: #ddd; display: inline-block; height: 100%; position: absolute; left: 0; top: 0; transition: width .4s;"></div><div style="padding: .25em; position: relative; text-align: center; z-index: 9;"><span id="ga_search_data_now">1</span>/<span id="ga_search_data_max">35</span></div></div><div style="margin-top: 1em; text-align: center;"><a href="#" id="ga_search_data_cancel">キャンセル</a></div></div></div>')
     ;
 
-    var s = 1000, // 処理待機時間
-        mv = 37,  // 登録最大個数
+    var s = 3000, // 処理待機時間
+        mv = 38,  // 登録最大個数
         $e = $('#ga_search_data_state'),
         $r = $('#ga_search_data_bar'),
         $n = $('#ga_search_data_now'),
@@ -34,11 +36,11 @@ if ( $('#ID-m-content-content > h2').text() === 'オーガニック検索ソー�
     function action() {
       clearInterval(roop);
 
-      if ( document.querySelector('input[value="+ 検索エンジンを追加"]') ) {
-        var $b = $('input[value="+ 検索エンジンを追加"]'),
-            $a = $('tbody.ID-adminTableBody'),
+      if (iframe.find('#ID-m-content-content input[value="+ 検索エンジンを追加"]')) {
+        var $b = iframe.find('#ID-m-content-content input[value="+ 検索エンジンを追加"]'),
+            $a = iframe.find('#ID-m-content-content tbody.ID-adminTableBody'),
             $t = $a.children('tr'),
-            l = $t.filter('[class*="ID-row-"]').length,
+            l = $t.filter('[class*="ID-row-"]').length + 1,
             np = Math.floor((l / mv) * 100)
         ;
         $m.text(mv);
@@ -53,15 +55,17 @@ if ( $('#ID-m-content-content > h2').text() === 'オーガニック検索ソー�
           setTimeout(function() {
             poporon();
             function poporon() {
-              if ( $('#ID-m-content-content input[type="text"]').length === 0 ) {
+              if (iframe.find('#ID-m-content-content input[type="text"]').length === 0) {
                 // 実行が早すぎた時の処理
                 setTimeout(function() {
                   poporon();
                 }, s);
               } else
               {
-                $d = document.forms[0].elements;
-                $d[0].value = d1; $d[1].value = d2; $d[2].value = d3; $d[4].click();
+                iframe.find('#ID-m-content-content input[data-name="displayName"]').val(d1);
+                iframe.find('#ID-m-content-content input[data-name="domainName"]').val(d2);
+                iframe.find('#ID-m-content-content input[data-name="queryParam"]').val(d3);
+                iframe.find('#ID-m-content-content button[data-name="actionFormButton"]').click();
                 roopDo();
               }
             }
